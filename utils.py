@@ -16,9 +16,9 @@ random.seed(1)
 
 def var(i, requires_grad=True):
     if torch.cuda.is_available():
-        return Variable(torch.tensor(i, dtype=torch.float).cuda(), requires_grad=requires_grad)
+        return Variable(torch.tensor([i], dtype=torch.float).cuda(), requires_grad=requires_grad)
     else:
-        return Variable(torch.tensor(i, dtype=torch.float), requires_grad=requires_grad)
+        return Variable(torch.tensor([i], dtype=torch.float), requires_grad=requires_grad)
 
 
 def var_list(i_list, requires_grad=True):
@@ -191,6 +191,7 @@ def batch_pair_trajectory(trajectory_list, data_bs=None, standard_value=0.0):
 def batch_points(l):
     # list of elements
     # each element is a list
+    # return a tensor list
     L = np.array(l)
     if torch.cuda.is_available():
         res = torch.from_numpy(L).float().cuda()
@@ -358,7 +359,7 @@ def divide_chunks(components_list, bs=1, data_bs=None):
     }
     '''
     for i in range(0, len(components_list), bs):
-        components = components_list[i:i + bs]
+        components = components_list[i:i + bs] # get ith to (i+bs-1)th elements from the components_list
         abstract_states = dict()
         trajectories = list()
         center_list, width_list = list(), list()
@@ -366,7 +367,7 @@ def divide_chunks(components_list, bs=1, data_bs=None):
         for component_idx, component in enumerate(components):
             center_list.append(component['center'])
             width_list.append(component['width'])
-            for trajectory_idx, trajectory in enumerate(component['trajectories']):
+            for trajectory_idx, trajectory in enumerate(component['trajectories']):#enumerate trajectory that belongs to the ith component
                 trajectories.append(trajectory)
                 if data_bs is None:
                     pass

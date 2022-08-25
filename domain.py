@@ -26,7 +26,7 @@ def show_value(x):
     if isinstance(x, torch.Tensor):
         print('value', x.data.item())
     elif isinstance(x, Interval):
-        print('interval', x.left.data.item(), x.righst.data.item())
+        print('interval', x.left.data.item(), x.right.data.item())
 
 def show_op(x):
     if not TEST:

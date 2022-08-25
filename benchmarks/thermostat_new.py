@@ -59,7 +59,7 @@ def initialize_components(abstract_states):
         'p_list': [var(0.0) for i in range(B)], # might be changed to batch
         'alpha_list': [var(1.0) for i in range(B)],
     }
-
+    print(states)
     return states
 
 
@@ -162,8 +162,8 @@ class Program(nn.Module):
         self.nn_cool = LinearReLU(l=l)
         self.nn_heat = LinearReLU(l=l)
 
-        self.assign_cool_nn = Assign(target_idx=[3, 2], arg_idx=[1], f=self.nn_cool)
-        self.assign_cooling = Assign(target_idx=[1], arg_idx=[1], f=f_cooling)
+        self.assign_cool_nn = Assign(target_idx=[3, 2], arg_idx=[1], f=self.nn_cool)  # Assign: assign the pi_theta_cool
+        self.assign_cooling = Assign(target_idx=[1], arg_idx=[1], f=f_cooling)  # Assign: assign the cooling
         self.cool_block = nn.Sequential(
             self.assign_cool_nn,
             self.assign_cooling,
@@ -178,6 +178,7 @@ class Program(nn.Module):
             self.assign_update_heat,
             self.assign_warming,
         )
+        # Find out what is ifelse_isOn, while, etc.
         self.ifelse_isOn = IfElse(target_idx=[3], test=var(0.5), f_test=f_test, body=self.cool_block, orelse=self.heat_block)
         
         self.assign_update = Assign(target_idx=[0], arg_idx=[0], f=assign_update)

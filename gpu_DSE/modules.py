@@ -119,15 +119,15 @@ def calculate_states(target_idx, arg_idx, f, states):
     x = states['x']
     # print(f)
     # print(f"x, c: {x.c}, delta: {x.delta}")
-    input = x.select_from_index(1, arg_idx)
+    input = x.select_from_index(1, arg_idx)  # select a box from x as the input
     res = f(input)
     # print(f"f: {f} \ninput, c: {input.c.detach().cpu().numpy().tolist()} \n, delta: {input.delta.detach().cpu().numpy().tolist()}\n; res, c: {res.c.detach().cpu().numpy().tolist()}\n, delta: {res.delta.detach().cpu().numpy().tolist()}")
     # print(f"before assign: x.c: {x.c}, res.c: {res.c}")
     # print(f"target_idx: {target_idx}")
-    x.c[:, target_idx] = res.c 
+    x.c[:, target_idx] = res.c  # modify the box's center
     # print(f"after assign: x.c: {x.c}")
 
-    x.delta[:, target_idx] = res.delta
+    x.delta[:, target_idx] = res.delta  # modify the box's delta
     states['x'] = x
     # if constants.profile:
     #     end = time.time()

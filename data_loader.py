@@ -26,7 +26,9 @@ def load_data(
             state_list, action_list = state_content[0], state_content[1]
             # one state is represented by state, action, label
             state = [float(v) for v in state_list.split(',')]
+            #print(f"state is:{state}")
             action = [float(v) for v in action_list.split(',')]
+            #print(f"action is:{action}")
             trajectory_list.append([state, action])
         data_list.append(trajectory_list)
 
@@ -38,6 +40,8 @@ def load_data(
     trajectory_train_list = data_list[:train_size]
     trajectory_test_list = data_list[train_size:train_size + test_size]
     print(f"train tra length: {len(trajectory_train_list)}, test tra length: {len(trajectory_test_list)}")
+    # print(trajectory_train_list[0])
+    # print(trajectory_test_list)
     # exit(0)
     # X_train, X_test, y_train, y_test
     print("---Data Generation---")

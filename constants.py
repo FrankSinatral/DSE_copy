@@ -5,6 +5,7 @@ import numpy as np
 # import domain
 
 args = get_args()
+quick_mode = args.quick_mode
 generate_dataset = args.generate_dataset
 dataset_distribution = args.dataset_distribution
 lr = args.lr
