@@ -37,14 +37,17 @@ def get_parser():
     p.add_argument("--num_epoch", default=100, type=int, help="number of epochs for training")
     p.add_argument("--width", default=0.1, type=float, help="width of perturbation") # for DiffAI
     
-    p.add_argument("--nn_mode", default='all', help="how many NN used in model, 'single' means only used in the first one")
-    p.add_argument("--l", default=10, type=int, help="size of hidden states in NN")
+    p.add_argument("--nn_mode", default='complex', help="how many NN used in model, 'single' means only used in the first one")
+    # p.add_argument("--nn_mode", default='all', help="how many NN used in model, 'single' means only used in the first one")
+    p.add_argument("--l", default=64, type=int, help="size of hidden states in NN")
+    # p.add_argument("--l", default=10, type=int, help="size of hidden states in NN")
     p.add_argument("--b", default=100, type=int, help="range of lambda")
     p.add_argument("--module", default="linearrelu", help="module in model")
 
     # dataset
     p.add_argument("--data_attr", default="normal_52.0_59.0", help="dataset_attr")
-    p.add_argument("--train_size", default=200, type=int, help="training size")
+    p.add_argument("--train_size", default=500, type=int, help="training size")
+    # p.add_argument("--train_size", default=200, type=int, help="training size")
     p.add_argument("--test_size", default=20000, type=int, help="test size")
     p.add_argument("--generate_dataset", default=False, type=str2bool, help="generate the data set")
     p.add_argument("--fixed_dataset", default=False, type=str2bool, help="whether to use the same dataset")
@@ -53,7 +56,8 @@ def get_parser():
     p.add_argument("--ini_unsafe_probability", default=0.0, type=float, help="the ini-unsafe_probability to handle")
 
     # perturbation
-    p.add_argument("--num_components", default=10, type=int, help="number of components to split")
+    p.add_argument("--num_components", default=1, type=int, help="number of components to split")
+    # p.add_argument("--num_components", default=10, type=int, help="number of components to split")
     p.add_argument("--bs", default=10, type=int, help="batch size by number of component")
     p.add_argument("--perturbation_width", default=0.3, type=float, help="the perturbation width in extracting input distribution")
 
@@ -129,7 +133,8 @@ def get_parser():
     # evaluation
     p.add_argument("--test_mode", default=False, type=str2bool, help="decide whether check load model and then test")
     p.add_argument("--extract_one_trajectory", default=False, type=str2bool, help="extract trajectory starting from one point")
-    p.add_argument("--AI_verifier_num_components", default=500, type=int, help="components allowed when using AI as a verifier")
+    p.add_argument("--AI_verifier_num_components", default=10000, type=int, help="components allowed when using AI as a verifier")
+    # p.add_argument("--AI_verifier_num_components", default=500, type=int, help="components allowed when using AI as a verifier")
     p.add_argument("--SE_verifier_run_times", default=100, type=int, help="Times to run when using SE as a verifier")
     p.add_argument("--SE_verifier_num_components", default=1, type=int, help="components allowed when using SE as a verifier")
 

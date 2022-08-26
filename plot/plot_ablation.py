@@ -6,7 +6,7 @@ def read_value(config):
     # safety portion, data loss
     safety_portion_dict = dict()
     data_loss_dict = dict()
-    for method in ['DSE', 'DiffAI+', 'Ablation']:
+    for method in ['DSE']: #, 'DiffAI+', 'Ablation']: # slightly modify the read value for read_value
         subconfig = config[method]
         safety_portion_list, safety_portion_list_min, safety_portion_list_max = list(), list(), list()
         data_loss_list, data_loss_list_min, data_loss_list_max = list(), list(), list()
@@ -168,14 +168,14 @@ if __name__ == '__main__':
     #    'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
     #    'benchmark_length': 20,
     # }
-    # configs['Thermostat']['DSE'] = {
-    #    'log_path': f"../gpu_DSE/result/",
-    #    'result_prefix': f"thermostat_new_complex_64_2_1",
-    #    'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
-    #    'benchmark_name': "Thermostat",
-    #    'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
-    #    'benchmark_length': 20,
-    # }
+    configs['Thermostat']['DSE'] = {
+       'log_path': f"../gpu_DSE/result/",
+       'result_prefix': f"thermostat_new_complex_64_2_1",
+       'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
+       'benchmark_name': "Thermostat",
+       'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
+       'benchmark_length': 20,
+    }
     # configs['Thermostat']['DiffAI+'] = {
     #    'log_path': f"../gpu_DiffAI/result/",
     #    'result_prefix': f"thermostat_new_complex_64_2_100",
@@ -233,34 +233,40 @@ if __name__ == '__main__':
     #    'benchmark_length': 20,
     # }
 
-    configs['Cartpole']['Ablation'] = {
-       'log_path': f"../gpu_only_data/result/",
-       'result_prefix': f"cartpole_v2_complex_64_2_1",
-       'result_suffix': f"[0.1]_volume_20_evaluation.txt",
-       'benchmark_name': "Cartpole",
-       'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
-       'benchmark_length': 20,
-    }
-    configs['Cartpole']['DSE'] = {
-       'log_path': f"../gpu_DSE/result/",
-       'result_prefix': f"cartpole_v2_complex_64_2_1",
-       'result_suffix': f"[0.1]_volume_20_evaluation.txt",
-       'benchmark_name': "Cartpole",
-       'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
-       'benchmark_length': 20,
-    }
-    configs['Cartpole']['DiffAI+'] = {
-       'log_path': f"../gpu_DiffAI/result/",
-       'result_prefix': f"cartpole_v2_complex_64_2_3",
-       'result_suffix': f"[0.1]_volume_20_evaluation.txt",
-       'benchmark_name': "Cartpole",
-       'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
-       'benchmark_length': 20,
-    }
+    # configs['Cartpole']['Ablation'] = {
+    #    'log_path': f"../gpu_only_data/result/",
+    #    'result_prefix': f"cartpole_v2_complex_64_2_1",
+    #    'result_suffix': f"[0.1]_volume_20_evaluation.txt",
+    #    'benchmark_name': "Cartpole",
+    #    'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
+    #    'benchmark_length': 20,
+    # }
+    # configs['Cartpole']['DSE'] = {
+    #    'log_path': f"../gpu_DSE/result/",
+    #    'result_prefix': f"cartpole_v2_complex_64_2_1",
+    #    'result_suffix': f"[0.1]_volume_20_evaluation.txt",
+    #    'benchmark_name': "Cartpole",
+    #    'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
+    #    'benchmark_length': 20,
+    # }
+    # configs['Cartpole']['DiffAI+'] = {
+    #    'log_path': f"../gpu_DiffAI/result/",
+    #    'result_prefix': f"cartpole_v2_complex_64_2_3",
+    #    'result_suffix': f"[0.1]_volume_20_evaluation.txt",
+    #    'benchmark_name': "Cartpole",
+    #    'trajectory_size_list': [1, 5, 10, 25, 50], # 1000, 2500, 5000],
+    #    'benchmark_length': 20,
+    # }
+
+    # for benchmark_name, benchmark_config in configs.items():
+    #     print(f"Benchmark name: {benchmark_name}")
+    #     if benchmark_name != 'Cartpole':
+    #         continue
+    #     visualize_data_size(benchmark_config)
 
     for benchmark_name, benchmark_config in configs.items():
         print(f"Benchmark name: {benchmark_name}")
-        if benchmark_name != 'Cartpole':
+        if benchmark_name != 'Thermostat':
             continue
         visualize_data_size(benchmark_config)
 

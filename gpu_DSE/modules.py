@@ -136,7 +136,9 @@ def calculate_states(target_idx, arg_idx, f, states):
 
 
 def extract_branch_probability(target, test):
-    p_test = torch.zeros(target.getLeft().shape).cuda()
+    p_test = torch.zeros(target.getLeft().shape)
+    if torch.cuda.is_available():
+        p_test = p_test.cuda()
     left_index = target.getRight() <= test
     right_index = target.getLeft() > test
     cross_idx = torch.logical_and(target.getRight() > test, target.getLeft() <= test)

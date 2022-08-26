@@ -153,7 +153,7 @@ if __name__ == "__main__":
                 else:
                     target[0]['map_condition'] = map_condition
 
-            N = 20
+            N = 2
 
             for i in range(N):
                 constants.status = 'train'
