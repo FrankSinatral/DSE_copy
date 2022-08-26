@@ -154,7 +154,7 @@ if __name__ == "__main__":
                     target[0]['map_condition'] = map_condition
 
             N = 2
-
+            # N = 20
             for i in range(N):
                 constants.status = 'train'
                 import import_hub as hub
