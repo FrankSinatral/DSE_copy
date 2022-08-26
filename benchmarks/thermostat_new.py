@@ -59,7 +59,7 @@ def initialize_components(abstract_states):
         'p_list': [var(0.0) for i in range(B)], # might be changed to batch
         'alpha_list': [var(1.0) for i in range(B)],
     }
-    print(states)
+    #print(states)
     return states
 
 
