@@ -1,0 +1,55 @@
+Namespace(AI_verifier_num_components=500, SE_verifier_num_components=1, SE_verifier_run_times=100, adaptive_weight=False, b=100, benchmark_name='thermostat_new', bound_end=20, bound_start=0, bs=10, cuda_debug=False, data_attr='normal_52.0_59.0', data_bs=2, data_safe_consistent=True, data_size=10000, dataset='thermostat', dataset_distribution='normal', debug=False, debug_verifier=False, early_stop=True, expr_i_number=3, extract_one_trajectory=False, fixed_dataset=False, gamma=1.0, generate_dataset=False, ini_unsafe_probability=0.0, l=10, lr=0.001, mode='DSE', module='linearrelu', nn_mode='all', num_components=10, num_epoch=100, only_data_loss=False, optimizer_method='Adam', outside_trajectory_loss=True, perturbation_width=0.3, plot=False, profile=False, quick_mode=False, run_time_debug=False, sample_std=1.0, sample_width=None, save=True, score_f='volume', simple_debug=False, stop_val=0.05, t_epoch=4, test_mode=False, test_size=20000, train_sample_size=30, train_size=16000, use_abstract_components=True, use_data_loss=True, use_hoang=False, use_smooth_kernel=False, verify_outside_trajectory_loss=False, w=0.5, width=0.1)
+Target info: [[55.0, 83.0]], [83.0]
+path_sample_size: 30, safa_range_bound: 83.0
+Namespace(AI_verifier_num_components=500, SE_verifier_num_components=1, SE_verifier_run_times=100, adaptive_weight=False, b=100, benchmark_name='thermostat_new', bound_end=20, bound_start=0, bs=10, cuda_debug=False, data_attr='normal_52.0_59.0', data_bs=2, data_safe_consistent=True, data_size=10000, dataset='thermostat', dataset_distribution='normal', debug=False, debug_verifier=False, early_stop=True, expr_i_number=3, extract_one_trajectory=False, fixed_dataset=False, gamma=1.0, generate_dataset=False, ini_unsafe_probability=0.0, l=10, lr=0.001, mode='DSE', module='linearrelu', nn_mode='all', num_components=10, num_epoch=100, only_data_loss=False, optimizer_method='Adam', outside_trajectory_loss=True, perturbation_width=0.3, plot=False, profile=False, quick_mode=False, run_time_debug=False, sample_std=1.0, sample_width=None, save=True, score_f='volume', simple_debug=False, stop_val=0.05, t_epoch=4, test_mode=False, test_size=20000, train_sample_size=30, train_size=16000, use_abstract_components=True, use_data_loss=True, use_hoang=False, use_smooth_kernel=False, verify_outside_trajectory_loss=False, w=0.5, width=0.1)
+Target info: [[55.0, 83.0]], [83.0]
+path_sample_size: 30, safa_range_bound: 83.0
+Namespace(AI_verifier_num_components=500, SE_verifier_num_components=1, SE_verifier_run_times=100, adaptive_weight=False, b=100, benchmark_name='thermostat_new', bound_end=20, bound_start=0, bs=10, cuda_debug=False, data_attr='normal_52.0_59.0', data_bs=2, data_safe_consistent=True, data_size=10000, dataset='thermostat', dataset_distribution='normal', debug=False, debug_verifier=False, early_stop=True, expr_i_number=3, extract_one_trajectory=False, fixed_dataset=False, gamma=1.0, generate_dataset=False, ini_unsafe_probability=0.0, l=10, lr=0.001, mode='DSE', module='linearrelu', nn_mode='all', num_components=10, num_epoch=100, only_data_loss=False, optimizer_method='Adam', outside_trajectory_loss=True, perturbation_width=0.3, plot=False, profile=False, quick_mode=False, run_time_debug=False, sample_std=1.0, sample_width=None, save=True, score_f='volume', simple_debug=False, stop_val=0.05, t_epoch=4, test_mode=False, test_size=20000, train_sample_size=30, train_size=16000, use_abstract_components=True, use_data_loss=True, use_hoang=False, use_smooth_kernel=False, verify_outside_trajectory_loss=False, w=0.5, width=0.1)
+Target info: [[55.0, 83.0]], [83.0]
+path_sample_size: 30, safa_range_bound: 83.0
+Namespace(AI_verifier_num_components=500, SE_verifier_num_components=1, SE_verifier_run_times=100, adaptive_weight=False, b=100, benchmark_name='thermostat_new', bound_end=20, bound_start=0, bs=10, cuda_debug=False, data_attr='normal_52.0_59.0', data_bs=2, data_safe_consistent=True, data_size=10000, dataset='thermostat', dataset_distribution='normal', debug=False, debug_verifier=False, early_stop=True, expr_i_number=3, extract_one_trajectory=False, fixed_dataset=False, gamma=1.0, generate_dataset=False, ini_unsafe_probability=0.0, l=10, lr=0.001, mode='DSE', module='linearrelu', nn_mode='all', num_components=10, num_epoch=100, only_data_loss=False, optimizer_method='Adam', outside_trajectory_loss=True, perturbation_width=0.3, plot=False, profile=False, quick_mode=False, run_time_debug=False, sample_std=1.0, sample_width=None, save=True, score_f='volume', simple_debug=False, stop_val=0.05, t_epoch=4, test_mode=False, test_size=20000, train_sample_size=30, train_size=16000, use_abstract_components=True, use_data_loss=True, use_hoang=False, use_smooth_kernel=False, verify_outside_trajectory_loss=False, w=0.5, width=0.1)
+Target info: [[55.0, 83.0]], [83.0]
+path_sample_size: 30, safa_range_bound: 83.0
+Namespace(AI_verifier_num_components=500, SE_verifier_num_components=1, SE_verifier_run_times=100, adaptive_weight=False, b=100, benchmark_name='thermostat_new', bound_end=20, bound_start=0, bs=10, cuda_debug=False, data_attr='normal_52.0_59.0', data_bs=2, data_safe_consistent=True, data_size=10000, dataset='thermostat', dataset_distribution='normal', debug=False, debug_verifier=False, early_stop=True, expr_i_number=3, extract_one_trajectory=False, fixed_dataset=False, gamma=1.0, generate_dataset=False, ini_unsafe_probability=0.0, l=10, lr=0.001, mode='DSE', module='linearrelu', nn_mode='all', num_components=10, num_epoch=100, only_data_loss=False, optimizer_method='Adam', outside_trajectory_loss=True, perturbation_width=0.3, plot=False, profile=False, quick_mode=False, run_time_debug=False, sample_std=1.0, sample_width=None, save=True, score_f='volume', simple_debug=False, stop_val=0.05, t_epoch=4, test_mode=False, test_size=20000, train_sample_size=30, train_size=16000, use_abstract_components=True, use_data_loss=True, use_hoang=False, use_smooth_kernel=False, verify_outside_trajectory_loss=False, w=0.5, width=0.1)
+Target info: [[55.0, 83.0]], [83.0]
+path_sample_size: 30, safa_range_bound: 83.0
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.14077092707157135
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.5973933339118958
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.2967480719089508
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.4460189938545227
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.5759333968162537
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.33994197845458984
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.45490238070487976
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.4755401313304901
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.39741066098213196
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.2971976399421692
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.12843339145183563
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.6008275151252747
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.1476680189371109
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.6236884593963623
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.14702096581459045
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.5674704313278198
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.501092255115509
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.2615191340446472
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.654308021068573
+verify AI: #worst case unsafe num: 1.0
+test data loss: 0.17299990355968475
