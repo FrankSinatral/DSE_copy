@@ -41,12 +41,13 @@ def get_parser():
     # p.add_argument("--nn_mode", default='all', help="how many NN used in model, 'single' means only used in the first one")
     p.add_argument("--l", default=64, type=int, help="size of hidden states in NN")
     # p.add_argument("--l", default=10, type=int, help="size of hidden states in NN")
-    p.add_argument("--b", default=100, type=int, help="range of lambda")
+    p.add_argument("--b", default=10, type=int, help="range of lambda")
+    # p.add_argument("--b", default=100, type=int, help="range of lambda")
     p.add_argument("--module", default="linearrelu", help="module in model")
 
     # dataset
     p.add_argument("--data_attr", default="normal_52.0_59.0", help="dataset_attr")
-    p.add_argument("--train_size", default=500, type=int, help="training size")
+    p.add_argument("--train_size", default=400, type=int, help="training size")
     # p.add_argument("--train_size", default=200, type=int, help="training size")
     p.add_argument("--test_size", default=20000, type=int, help="test size")
     p.add_argument("--generate_dataset", default=False, type=str2bool, help="generate the data set")
