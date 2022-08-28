@@ -185,13 +185,13 @@ if __name__ == "__main__":
                 components = extract_abstract_representation(Trajectory_train, x_l, x_r, num_components) # catogorize train trajectory based on the value of the initial temperature
                 print(f"Prepare data: {time.time() - preprocessing_time} sec.")
 
-                lambda_list = list()
+                lambda_list = list()  # the range of the lambda should be smaller
                 model_list = list()
-                q_list = list() #initialize data loss list
-                c_list = list() #initialize safety loss list
+                q_list = list()  # initialize data loss list
+                c_list = list()  # initialize safety loss list
                 q = var(0.0)
 
-                for t in range(t_epoch):
+                for t in range(t_epoch):  # t_epoch might need to be larger
                     target_model_name = f"{model_name_prefix}_{safe_range_bound}_{i}_{t}"
                     new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp()))) #\lambda updata
                     # s = var(0.0)

@@ -141,9 +141,9 @@ def extract_safe_loss(component, target_component, target_idx):
 
     if target_component["map_mode"] is False:
         safe_interval_l, safe_interval_r = target_component["condition"].left, target_component["condition"].right
+        print(f"safe interval: {float(safe_interval_l)}, {float(safe_interval_r)}")
     else:
         safe_interval_list = target_component["map_condition"]
-    # print(f"safe interval: {float(safe_interval.left)}, {float(safe_interval.right)}")
     # method = target_component["method"]
     # component_loss = 0.0
     # real_safety_loss = 0.0
@@ -154,7 +154,7 @@ def extract_safe_loss(component, target_component, target_idx):
     # if target_component["distance"] is False:
     #     return var([0.0]), 0.0, (0.0, 0.0)
 
-    trajectories_l = component['trajectories_l'] #default thermo 300*21
+    trajectories_l = component['trajectories_l'] # default thermo 300*21
     trajectories_r = component['trajectories_r']
     p_list = torch.stack(component['p_list'])
     converted_trajectories_l, converted_trajectories_r = list(zip(*trajectories_l)), list(zip(*trajectories_r))
@@ -231,7 +231,10 @@ def extract_safe_loss(component, target_component, target_idx):
             # other_idx = intersection_r >= intersection_l
             other_idx = ~ empty_idx
             # print(unsafe_value.shape, empty_idx.shape, state_idx)
-            unsafe_value[empty_idx, state_idx] = torch.max(l[empty_idx] - safe_interval_r, safe_interval_l - r[empty_idx]) + 1.0 #the question is why plus 1
+
+            # unsafe_value[empty_idx, state_idx] selects the corresponding state_idx column
+            # and the k-th row if k-th value in empty_idx list is true.
+            unsafe_value[empty_idx, state_idx] = torch.max(l[empty_idx] - safe_interval_r, safe_interval_l - r[empty_idx]) + 1.0 # the question is why plus 1 保证unsafe value的连续性
             unsafe_value[other_idx, state_idx] = 1 - (intersection_r[other_idx] - intersection_l[other_idx] + eps) / (r[other_idx] - l[other_idx] + eps)
             min_l, max_r = min(float(torch.min(l)), min_l), max(float(torch.max(r)), max_r)
 
@@ -441,14 +444,18 @@ def learning(
         for trajectories, abstract_states in divide_chunks(components, bs=bs, data_bs=None):
             data_loss = cal_data_loss(m, trajectories, criterion)
             safe_loss, real_safety_loss = cal_safe_loss(m, abstract_states, target)
-            loss = (data_loss + lambda_ * safe_loss) / lambda_
+            # loss = (data_loss + lambda_ * safe_loss) / lambda_
+            loss = safe_loss
+
             if (i != epochs_to_skip):
+                for name, parms in m.named_parameters():
+                    parms.requires_grad = True
                 optimizer.zero_grad()
                 loss.backward(retain_graph=True)
-                # loss.backward()
+                for name, parms in m.named_parameters():
+                    print('-->name:', name, '-->grad_requirs:', parms.requires_grad, '--> parms_value: ', parms, '-->grad_value:', parms.grad)
                 torch.nn.utils.clip_grad_norm_(m.parameters(), 1)
                 optimizer.step()
-
         
         if save:
             save_model(m, constants.MODEL_PATH, name=model_name, epoch=i)
