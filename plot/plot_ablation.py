@@ -18,7 +18,7 @@ def read_value(config):
                 f = open(log_path, 'r')
                 sub_safety_portion_list = list()
                 sub_data_loss_list = list()
-                for line  in f:
+                for line in f:
                     # if 'Namespace' in line:
                     #     sub_safety_portion_list = list()
                     #     sub_data_loss_list = list()
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     configs = dict()
     configs['Thermostat'] = {
         'benchmark_name': "Thermostat",
-        'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
+        'trajectory_size_list': [10, 50, 100],# 250, 500], # 1000, 2500, 5000],
         'benchmark_length': 20,
     }
     configs['AC'] = {
@@ -168,13 +168,21 @@ if __name__ == '__main__':
     #    'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
     #    'benchmark_length': 20,
     # }
+    # configs['Thermostat']['DSE'] = {
+    #    'log_path': f"../gpu_DSE/result/",
+    #    'result_prefix': f"thermostat_new_complex_64_2_1",
+    #    'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
+    #    'benchmark_name': "Thermostat",
+    #    'trajectory_size_list': [10, 50, 100],# 250, 500], # 1000, 2500, 5000],
+    #    'benchmark_length': 20,
+    # }
     configs['Thermostat']['DSE'] = {
-       'log_path': f"../gpu_DSE/result/",
-       'result_prefix': f"thermostat_new_complex_64_2_1",
-       'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
-       'benchmark_name': "Thermostat",
-       'trajectory_size_list': [10, 50, 100, 250, 500], # 1000, 2500, 5000],
-       'benchmark_length': 20,
+        'log_path': f"../gpu_DSE/result/",
+        'result_prefix': f"thermostat_new_complex_10_2_1",
+        'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
+        'benchmark_name': "Thermostat",
+        'trajectory_size_list': [10, 50, 100],  # 250, 500], # 1000, 2500, 5000],
+        'benchmark_length': 20,
     }
     # configs['Thermostat']['DiffAI+'] = {
     #    'log_path': f"../gpu_DiffAI/result/",

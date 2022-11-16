@@ -265,14 +265,14 @@ def safe_distance(component_result_list, target):
     # measure safe distance in DSE
     # take the average over components
     
-    #loss = var_list([0.0])
-    loss_list = []
+    loss = var_list([0.0])
+    # loss_list = []
     real_safety_loss = 0.0
     # min_l, max_r = 100000, -100000
     # sum the safety loss together
     for idx, target_component in enumerate(target):
-        #target_loss = var_list([0.0])
-        target_loss_list = []
+        target_loss = var_list([0.0])
+        # target_loss_list = []
         real_target_loss = 0.0
         min_l, max_r = 100000, -100000 # set a very large min and a very negative max as their initial values, knowing that they will be substituded after the first iteration
         # print(f"len abstract_state_list: {len(abstract_state_list)}")
@@ -280,16 +280,16 @@ def safe_distance(component_result_list, target):
             component_safe_loss, component_real_safety_loss, (tmp_min_l, tmp_max_r) = extract_safe_loss(
                 component, target_component, target_idx=idx, 
             )
-            #target_loss += component_safe_loss
-            target_loss_list.append(component_safe_loss)
+            target_loss = torch.add(target_loss, component_safe_loss)
+            # target_loss_list.append(component_safe_loss)
 
             real_target_loss += component_real_safety_loss
             min_l, max_r = min(min_l, tmp_min_l), max(max_r, tmp_max_r)
-        # target_loss = target_loss / len(component_result_list)
-        target_loss = torch.sum(var_list(target_loss_list)) / len(component_result_list)
+        target_loss = torch.div(target_loss, len(component_result_list))
+        # target_loss = torch.sum(var_list(target_loss_list)) / len(component_result_list)
         real_target_loss = real_target_loss / len(component_result_list)
-        # loss += target_loss
-        loss_list.append(target_loss)
+        loss = torch.add(loss, target_loss)
+        # loss_list.append(target_loss)
         real_safety_loss += real_target_loss
         # print(f"in target real safety loss: {real_safety_loss}")
         print(f"{target_component['name']}, range of trajectory: {min_l, max_r}")
@@ -298,7 +298,7 @@ def safe_distance(component_result_list, target):
         log_file = open(constants.file_dir, 'a')
         log_file.write(f"range of trajectory: {min_l, max_r}\n")
         log_file.flush()
-    return torch.sum(var_list(loss_list)), real_safety_loss
+    return loss, real_safety_loss
 
 
 def cal_data_loss(m, trajectories, criterion):
@@ -308,8 +308,8 @@ def cal_data_loss(m, trajectories, criterion):
     if len(trajectories) == 0:
         return var_list([0.0])
 
-    expec_data_loss_list = []
-    #expec_data_loss = var_list([0.0])
+    # expec_data_loss_list = []
+    expec_data_loss = var_list([0.0])
     count = 0
     # print(f"in data loss", len(trajectories))
     for X, y in batch_pair_yield(trajectories, data_bs=512):
@@ -323,11 +323,13 @@ def cal_data_loss(m, trajectories, criterion):
         data_loss = criterion(yp, y) #calculate data_loss using yp and y
         # print('yp:', yp)
         # print('y:', y)
-        expec_data_loss_list.append(data_loss)
-        #expec_data_loss += data_loss
+        # expec_data_loss_list.append(data_loss)
+        expec_data_loss = torch.add(expec_data_loss, data_loss)
+        # expec_data_loss.data += data_loss.data
+        # expec_data_loss.requires_grad = True
         count += 1
-    expec_data_loss = torch.sum(var_list(expec_data_loss_list)) / count
-
+    # expec_data_loss = torch.sum(var_list(expec_data_loss_list)) / count
+    expec_data_loss.data = torch.div(expec_data_loss, count)
     return expec_data_loss
 
 
@@ -340,7 +342,7 @@ def cal_safe_loss(m, abstract_states, target):
     }>
     '''
     # show_component(abstract_state)
-    ini_states = initialize_components(abstract_states)
+    ini_states = initialize_components(abstract_states)  # ini_states中的p_list和alpha_list表示什么？
     component_result_list = list()
     for i in range(len(ini_states['idx_list'])):
         component = {
@@ -352,7 +354,7 @@ def cal_safe_loss(m, abstract_states, target):
     
     # TODO: sample simultanuously
     # aggregate abstract states based on sample_size
-    aggregated_abstract_states_list = aggregate_sampling_states(abstract_states, constants.SAMPLE_SIZE) #abstract_states copy SAMPLE_SIZE times
+    aggregated_abstract_states_list = aggregate_sampling_states(abstract_states, constants.SAMPLE_SIZE)  # abstract_states copy SAMPLE_SIZE times
     if constants.profile:
         start = time.time()
     for aggregated_abstract_states in aggregated_abstract_states_list:
@@ -442,20 +444,17 @@ def learning(
             continue
 
         for trajectories, abstract_states in divide_chunks(components, bs=bs, data_bs=None):
+            optimizer.zero_grad()
             data_loss = cal_data_loss(m, trajectories, criterion)
             safe_loss, real_safety_loss = cal_safe_loss(m, abstract_states, target)
-            # loss = (data_loss + lambda_ * safe_loss) / lambda_
-            loss = safe_loss
+            loss = (data_loss + lambda_ * safe_loss) / lambda_
+
 
             if (i != epochs_to_skip):
-                for name, parms in m.named_parameters():
-                    parms.requires_grad = True
-                optimizer.zero_grad()
                 loss.backward(retain_graph=True)
-                for name, parms in m.named_parameters():
-                    print('-->name:', name, '-->grad_requirs:', parms.requires_grad, '--> parms_value: ', parms, '-->grad_value:', parms.grad)
                 torch.nn.utils.clip_grad_norm_(m.parameters(), 1)
                 optimizer.step()
+
         
         if save:
             save_model(m, constants.MODEL_PATH, name=model_name, epoch=i)
@@ -498,7 +497,7 @@ def learning(
         log_file.write(f"One train: Optimization-- ' + total time: {spend_time}, total epochs: {i + 1}, avg time: {spend_time/(i + 1)}\n")
         log_file.close()
     
-    return data_loss, torch.tensor(real_safety_loss), TIME_OUT
+    return data_loss.data, torch.tensor(real_safety_loss), TIME_OUT
 
 
 # def cal_c(X_train, y_train, m, target):

@@ -35,7 +35,7 @@ def load_data(
     # do not use random shuffle, bugs
     # data_list = np.array(data_list)
     # print(f"data:\n {data_list[0][0]}\n{data_list[1][0]}\n{data_list[2][0]}")
-    np.random.shuffle(data_list)
+    np.random.shuffle(data_list)  # For thermostat_new, data_list is 20000 * 20, where 20000 is the number of trajectories, and 20 is the number of (state, action) tuples in a trajectory
     # print(f"data after shuffle:\n {data_list[0][0]}\n{data_list[1][0]}\n{data_list[2][0]}")
     trajectory_train_list = data_list[:train_size]
     trajectory_test_list = data_list[train_size:train_size + test_size]

@@ -19,7 +19,7 @@ from utils import (
     append_log,
 )
 
-
+# 对应论文中的L(theta_hat, lambda)
 def best_lambda(q_hat, c_hat):
     if c_hat.data.item() <= 0.0:
         res_lambda = var(0.0)
@@ -44,8 +44,8 @@ def best_theta(tmp_m_name,
     q, c, time_out = learning(
         m=m,
         components=components,
-        lambda_=lambda_,#lambda_=new_lambda
-        epoch=num_epoch,
+        lambda_=lambda_,  # lambda_=new_lambda
+        epoch=epoch,  # num_epoch,
         target=target,
         lr=lr,
         bs=bs,
@@ -70,8 +70,9 @@ if __name__ == "__main__":
         print(f"Safe Range Bound: {safe_range_bound}")
 
         # update target, fix the left endpoint, varify the right endpoint
-        target = list()
+        target = list()  # 查看target中是什么路径
         for idx, safe_range in enumerate(safe_range_list):
+            # For thermostat_new, multi_agent_mode is false.
             if multi_agent_mode is True:
                 # target distance, x1, x2
                 # distance
@@ -109,7 +110,7 @@ if __name__ == "__main__":
                         "map_mode": map_mode,
                         "distance": False,
                     }
-                )
+                ) # # for the
             elif benchmark_name == 'aircraft_collision_new':
                 target.append(
                     {  # constraint is in box domain
@@ -133,6 +134,7 @@ if __name__ == "__main__":
                         "distance": False,
                     }
                 )
+            # For thermostat_new, map_mode is false.
             if map_mode is True:
                 map_condition = list()
                 for constraint_l in map_safe_range:
@@ -153,8 +155,8 @@ if __name__ == "__main__":
                 else:
                     target[0]['map_condition'] = map_condition
 
-            N = 2
-            # N = 20
+            # N = 2
+            N = 20
             for i in range(N):
                 constants.status = 'train'
                 import import_hub as hub
@@ -193,11 +195,13 @@ if __name__ == "__main__":
 
                 for t in range(t_epoch):  # t_epoch might need to be larger
                     target_model_name = f"{model_name_prefix}_{safe_range_bound}_{i}_{t}"
-                    new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp()))) #\lambda updata
-                    # s = var(0.0)
-                    # for idx in range(len(q_list)):
-                    #   s += q_list[idx].exp()
-                    # new_lambda = B.mul(q.exp().div(var(1.0).add(s)))
+                    if len(q_list) == 0:
+                        new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp()))) #\lambda updata ?????????????
+                    else:
+                        s = var(0.0)
+                        for idx in range(len(q_list)):
+                            s = torch.add(s, q_list[idx].exp())
+                        new_lambda = B.mul(q.exp().div(var(1.0).add(s)))
                     # new_lambda = B.mul(s.div(var(1.0).add(s)))
 
                     m = Program(l=l, nn_mode=nn_mode)
@@ -233,7 +237,7 @@ if __name__ == "__main__":
                         epochs_to_skip=epochs_to_skip,
                         model_name=target_model_name,
                         data_bs=data_bs,
-                    ) #Best_\theta(\lambda_t)
+                    )  # Best_\theta(\lambda_t)
                     # except:
                     #     print("learning function failed")
 
@@ -264,7 +268,7 @@ if __name__ == "__main__":
                                 save=save,
                                 epochs_to_skip=epochs_to_skip,
                                 data_bs=data_bs,
-                            ) # learning theta based on lambda_hat
+                            )  # learning theta based on lambda_hat
                         if abs((L_max - L_min).data.item()) <= gamma:
                             target_model_name = model_list[selected_idx] #target_model_name = target_model_name
                             break

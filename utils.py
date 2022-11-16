@@ -252,7 +252,7 @@ def create_components(x_l, x_r, num_components):
     # num_components: each dimension
     # just cut the x[0] space
     x_min, x_max = x_l[0], x_r[0]
-    x_c, x_width = list(), list()
+    x_c, x_width = list(), list()  # x_c is the center of x_l (left) and x_r(right), x_width is the distance from center to left and right.
     # print(x_l, x_r)
     for idx, idx_l in enumerate(x_l):
         idx_r = x_r[idx]
@@ -260,7 +260,7 @@ def create_components(x_l, x_r, num_components):
         x_width.append((idx_r - idx_l)/2)
     component_length = (x_max - x_min) / num_components
     components = list()
-    if len(x_l) == 1:
+    if len(x_l) == 1:  # For thermostat_new, len(x_l) == 1.
         for i in range(num_components):
             l = x_min + i * component_length
             r = x_min + (i + 1) * component_length
@@ -304,6 +304,9 @@ def create_components(x_l, x_r, num_components):
 
 
 def in_component(X, component):
+    """
+    Determine whether X is in the component.
+    """
     center = component['center']
     width = component['width']
     for i, x in enumerate(X):
@@ -316,11 +319,12 @@ def in_component(X, component):
 
 # Current Support: partition one dimension
 def extract_abstract_representation(trajectories, x_l, x_r, num_components):
-    # extract components
-    # interval
-    # and all the trajectories starting from that interval
+    """
+    把全部的trajectories根据初始状态分到每一个根据num_components划分好到区间内
+    Extract components interval and all the trajectories starting from that interval
+    """
     # x_min, x_max = x_l[0], x_r[0]
-    components = create_components(x_l, x_r, num_components)
+    components = create_components(x_l, x_r, num_components)  # components is a dict consists of center and width after splitting the initial interval of x
     # x_min, x_max = x_l[0], x_r[0]
     # components = create_components(x_min, x_max, num_components)
     for idx, component in enumerate(components):
@@ -330,7 +334,7 @@ def extract_abstract_representation(trajectories, x_l, x_r, num_components):
             }
         )
         for trajectory in trajectories:
-            state, _ = ini_trajectory(trajectory)
+            state, _ = ini_trajectory(trajectory)  # ini_trajectory returns the first state and action of the input trajectory
             if in_component([state[0]], component):
                 component['trajectories'].append(trajectory)
         components[idx] = component
