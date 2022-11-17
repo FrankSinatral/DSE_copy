@@ -269,8 +269,15 @@ if __name__ == "__main__":
                                 epochs_to_skip=epochs_to_skip,
                                 data_bs=data_bs,
                             )  # learning theta based on lambda_hat
+
+                        # print out lambda to file
+                        if not constants.debug:
+                            lambda_log_file = open(constants.file_dir_lambda, 'a')
+                            lambda_log_file.write(f"{t}-th t-epochs: new_lambda: {float(new_lambda)}, lambda_hat: {lambda_hat}\n")
+                            lambda_log_file.close()
+
                         if abs((L_max - L_min).data.item()) <= gamma:
-                            target_model_name = model_list[selected_idx] #target_model_name = target_model_name
+                            target_model_name = model_list[selected_idx]  # target_model_name = target_model_name
                             break
                     else:
                         # one-time training with a fixed lambda

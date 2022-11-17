@@ -1178,7 +1178,7 @@ alpha_smooth_max = 0.8
 eps = 1e-10
 
 if benchmark_name is not None:
-    model_name_prefix = f"{benchmark_name}_{nn_mode}_{l}_{data_bs}_{num_components}_{train_size}"
+    model_name_prefix = f"{benchmark_name}_{nn_mode}_{l}_{data_bs}_{num_components}_{train_size}_{t_epoch}"
     if score_f != 'volume':
         model_name_prefix += f"_{score_f}"
 
@@ -1194,9 +1194,11 @@ if benchmark_name is not None:
     result_prefix = f"{model_name_prefix}_{expr_info_prefix}_{test_info_prefix}"
 
     if test_mode:
+        file_dir_lambda = f"gpu_{mode}/result_test/{result_prefix}.txt"
         file_dir = f"gpu_{mode}/result_test/{result_prefix}.txt"
         file_dir_evaluation = f"gpu_{mode}/result_test/{result_prefix}_evaluation.txt"
     else:
+        file_dir_lambda = f"gpu_{mode}/result/{result_prefix}_lambda.txt"
         file_dir = f"gpu_{mode}/result/{result_prefix}.txt"
         file_dir_evaluation = f"gpu_{mode}/result/{result_prefix}_evaluation.txt"
 
