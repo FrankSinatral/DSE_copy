@@ -38,6 +38,8 @@ run.py
    --num_epoch: The number of epochs to run the training.
 ```
 
+* CUDA_VISIBLE_DEVICES="" python run.py --benchmark_name thermostat_new --nn_mode complex --l 10 --data_bs 2 --num_components 5 --train_size 5000 --AI_verifier_num_components 10000 --t_epoch 20
+
 * `mode` defines the method to train. Our paper gives three methods in evaluation: Ablation, DiffAI+, DSE, which map to [`only_data`, `DiffAI`, `DSE`].
 
    * `only_data` method trains with data loss only.
