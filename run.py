@@ -19,12 +19,18 @@ from utils import (
     append_log,
 )
 
+
 # 对应论文中的L(theta_hat, lambda)
 def best_lambda(q_hat, c_hat):
+    """计算L_max：给定pi/theta，让lambda来最大化L
+
+    """
+    # Best_lambda(theta_hat)
     if c_hat.data.item() <= 0.0:
         res_lambda = var(0.0)
     else:
         res_lambda = B
+    # return L(theta_hat, lambda)
     return q_hat.add(res_lambda.mul(c_hat))  # L_max
 
 
@@ -41,6 +47,9 @@ def best_theta(tmp_m_name,
                epochs_to_skip,
                data_bs):
     m = Program(l=l, nn_mode=nn_mode)
+    """计算L_min：给定lambda，让theta来最小化L
+    
+    """
     q, c, time_out = learning(
         m=m,
         components=components,
@@ -53,11 +62,11 @@ def best_theta(tmp_m_name,
         l=l,
         save=save,
         epochs_to_skip=epochs_to_skip,
-        model_name=tmp_m_name,#model_name=target_model_name
+        model_name=tmp_m_name,  # model_name=target_model_name
         data_bs=data_bs,
     )
 
-    return q.add(lambda_.mul(c))#lambda_ <- new_lambda
+    return q.add(lambda_.mul(c))  # lambda_ <- new_lambda
 
 
 if __name__ == "__main__":
@@ -110,7 +119,7 @@ if __name__ == "__main__":
                         "map_mode": map_mode,
                         "distance": False,
                     }
-                ) # # for the
+                )  # # for the
             elif benchmark_name == 'aircraft_collision_new':
                 target.append(
                     {  # constraint is in box domain
@@ -184,7 +193,8 @@ if __name__ == "__main__":
                 dataset_path = f"{dataset_path_prefix}_{safe_range_bound}.txt"
                 Trajectory_train, Trajectory_test = load_data(train_size=train_size, test_size=test_size,
                                                               dataset_path=dataset_path)
-                components = extract_abstract_representation(Trajectory_train, x_l, x_r, num_components) # catogorize train trajectory based on the value of the initial temperature
+                components = extract_abstract_representation(Trajectory_train, x_l, x_r,
+                                                             num_components)  # catogorize train trajectory based on the value of the initial temperature
                 print(f"Prepare data: {time.time() - preprocessing_time} sec.")
 
                 lambda_list = list()  # the range of the lambda should be smaller
@@ -195,17 +205,23 @@ if __name__ == "__main__":
 
                 for t in range(t_epoch):  # t_epoch might need to be larger
                     target_model_name = f"{model_name_prefix}_{safe_range_bound}_{i}_{t}"
-                    if len(q_list) == 0:
-                        new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp()))) #\lambda updata ?????????????
-                    else:
-                        s = var(0.0)
-                        for idx in range(len(q_list)):
-                            s = torch.add(s, q_list[idx].exp())
-                        new_lambda = B.mul(q.exp().div(var(1.0).add(s)))
+
+                    # -------------------------------------------------------------------
+                    # 见Algorithm1的 lambda_{t+1} <- lambda update(theta_1, ... theta_n)
+                    new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp())))  # 原本是这个
+                    # if len(q_list) == 0:
+                    #     new_lambda = B.mul(q.exp().div(var(1.0).add(q.exp())))
+                    # else:
+                    #     s = var(0.0)
+                    #     for idx in range(len(q_list)):
+                    #         s = torch.add(s, q_list[idx].exp())
+                    #     new_lambda = B.mul(q.exp().div(var(1.0).add(s)))
                     # new_lambda = B.mul(s.div(var(1.0).add(s)))
+                    # -------------------------------------------------------------------
 
                     m = Program(l=l, nn_mode=nn_mode)
-                    epochs_to_skip, m = load_model(m, MODEL_PATH, name=target_model_name) #intialize nn based on previous model
+                    epochs_to_skip, m = load_model(m, MODEL_PATH,
+                                                   name=target_model_name)  # intialize nn based on previous model
                     if constants.profile:
                         epochs_to_skip = -1
                         m = None
@@ -222,6 +238,8 @@ if __name__ == "__main__":
 
                     print(f"parameters: {count_parameters(m)}")
 
+                    # -------------------------------------------------------------------
+                    # 对应Algorithm1的Best_theta(lambda_t)，q和c包含了theta_t
                     # try:
                     q, c, time_out = learning(
                         m,
@@ -240,25 +258,37 @@ if __name__ == "__main__":
                     )  # Best_\theta(\lambda_t)
                     # except:
                     #     print("learning function failed")
+                    # -------------------------------------------------------------------
 
                     if not quick_mode and mode != 'only_data':
                         lambda_list.append(new_lambda)
                         model_list.append(target_model_name)
                         q_list.append(q)
                         c_list.append(c)
-                        selected_idx = random.choice([idx for idx in range(len(model_list))]) #Uniform
-                        lambda_hat = torch.stack(lambda_list).sum() / len(lambda_list) #Average
-                        L_max = best_lambda(q_hat=q_list[selected_idx], c_hat=c_list[selected_idx]) #No learning
+                        # -------------------------------------------------------------------
+                        # 对应Algorithm1的 hat{theta_t} <- Uniform(theta_1,..., theta_t)
+                        selected_idx = random.choice([idx for idx in range(len(model_list))])
+                        # -------------------------------------------------------------------
+                        # 对应Algorithm1的 对lambda_list求平均值得到lambda_hat
+                        lambda_hat = torch.stack(lambda_list).sum() / len(lambda_list)
+                        # -------------------------------------------------------------------
+                        # 对应 L_max = L(hat{theta}, Best_lambda(hat{theta}))
+                        L_max = best_lambda(q_hat=q_list[selected_idx], c_hat=c_list[selected_idx])
+                        # -------------------------------------------------------------------
                         if t == 0:
                             if c.data.item() <= 0.0:
                                 L_min = var(0.0)
                             else:
                                 L_min = B
                         else:
+                            # -------------------------------------------------------------------
                             L_min = best_theta(
-                                tmp_m_name=f"{model_name_prefix}_{safe_range_bound}_{i}_{t}_tmp",
-                                components=extract_abstract_representation(Trajectory_train, x_l, x_r, num_components),
-                                lambda_=lambda_hat,
+                                tmp_m_name=target_model_name,  # 原本是这样
+                                # 是要这样还是随机选择比较好#f"{model_name_prefix}_{safe_range_bound}_{i}_{t}_tmp",  # 这个地方可能有问题！！！应该是用学习好的模型去验证，而不是重新训练一个模型吧
+                                components=components,
+                                # extract_abstract_representation(Trajectory_train, x_l, x_r, num_components),
+                                # lambda_=lambda_hat,
+                                lambda_=new_lambda,  # 原本是这样
                                 epoch=num_epoch,
                                 target=target,
                                 lr=lr,
@@ -269,11 +299,12 @@ if __name__ == "__main__":
                                 epochs_to_skip=epochs_to_skip,
                                 data_bs=data_bs,
                             )  # learning theta based on lambda_hat
-
+                            # -------------------------------------------------------------------
                         # print out lambda to file
                         if not constants.debug:
                             lambda_log_file = open(constants.file_dir_lambda, 'a')
-                            lambda_log_file.write(f"{t}-th t-epochs: new_lambda: {float(new_lambda)}, lambda_hat: {lambda_hat}\n")
+                            lambda_log_file.write(
+                                f"{t}-th t-epochs: new_lambda: {float(new_lambda)}, lambda_hat: {lambda_hat}\n")
                             lambda_log_file.close()
 
                         if abs((L_max - L_min).data.item()) <= gamma:

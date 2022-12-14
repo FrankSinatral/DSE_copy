@@ -178,10 +178,10 @@ if __name__ == '__main__':
     # }
     configs['Thermostat']['DSE'] = {
         'log_path': f"../gpu_DSE/result/",
-        'result_prefix': f"thermostat_new_complex_10_2_1",
+        'result_prefix': f"thermostat_new_complex_10_2_1_4",
         'result_suffix': f"[83.0]_volume_10000_evaluation.txt",
         'benchmark_name': "Thermostat",
-        'trajectory_size_list': [10, 50, 100],  # 250, 500], # 1000, 2500, 5000],
+        'trajectory_size_list': [10, 50, 100, 250, 500, 5000], # 1000, 2500, 5000],
         'benchmark_length': 20,
     }
     # configs['Thermostat']['DiffAI+'] = {

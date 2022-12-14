@@ -5,6 +5,7 @@
 
 # all data
 *.png
+*.txt
 
 # all models
 **/models/**

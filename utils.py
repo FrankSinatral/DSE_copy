@@ -407,7 +407,7 @@ def create_abstract_states_from_components(components):
 
 def load_model(m, folder, name, epoch=None):
     if os.path.isfile(folder):
-        m.load_state_dict(torch.load(folder))
+        m.load_state_dict(torch.load(folder, map_location=torch.device('cpu')))
         return None, m
     model_dir = os.path.join(folder, f"model_{name}")
     if not os.path.exists(model_dir):
@@ -417,7 +417,7 @@ def load_model(m, folder, name, epoch=None):
     path = os.path.join(model_dir, str(epoch))
     if not os.path.exists(path):
         return None, None
-    m.load_state_dict(torch.load(path))
+    m.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
     return int(epoch), m
 
 

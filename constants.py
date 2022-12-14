@@ -1178,7 +1178,8 @@ alpha_smooth_max = 0.8
 eps = 1e-10
 
 if benchmark_name is not None:
-    model_name_prefix = f"{benchmark_name}_{nn_mode}_{l}_{data_bs}_{num_components}_{train_size}_{t_epoch}"
+    # model_name_prefix = f"{benchmark_name}_{nn_mode}_{l}_{data_bs}_{num_components}_{train_size}_{t_epoch}"
+    model_name_prefix = f"{benchmark_name}_{nn_mode}_{l}_{data_bs}_{num_components}_{train_size}"
     if score_f != 'volume':
         model_name_prefix += f"_{score_f}"
 

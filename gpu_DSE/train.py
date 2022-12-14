@@ -234,7 +234,7 @@ def extract_safe_loss(component, target_component, target_idx):
 
             # unsafe_value[empty_idx, state_idx] selects the corresponding state_idx column
             # and the k-th row if k-th value in empty_idx list is true.
-            unsafe_value[empty_idx, state_idx] = torch.max(l[empty_idx] - safe_interval_r, safe_interval_l - r[empty_idx]) + 1.0 # the question is why plus 1 保证unsafe value的连续性
+            unsafe_value[empty_idx, state_idx] = torch.max(l[empty_idx] - safe_interval_r, safe_interval_l - r[empty_idx]) + 1.0  # the question is why plus 1 保证unsafe value的连续性
             unsafe_value[other_idx, state_idx] = 1 - (intersection_r[other_idx] - intersection_l[other_idx] + eps) / (r[other_idx] - l[other_idx] + eps)
             min_l, max_r = min(float(torch.min(l)), min_l), max(float(torch.max(r)), max_r)
 
